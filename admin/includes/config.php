@@ -1,17 +1,17 @@
 <?php
 ///////////////////////////////////[CONFIGURATION NAVBAR]///////////////////////////////////////**
-$url ='http://lirifox.fr/'; //NOM DU DOMAINE IP/DOMAINE/LOCALHOST POUR LES DEV
-$sitename = 'Lirifox.fr |'; // NOM DU SITE
+$url ='https://tronpa.fr'; //NOM DU DOMAINE IP/DOMAINE/LOCALHOST POUR LES DEV
+$sitename = 'Dragonia |'; // NOM DU SITE
 $iconsite ='../assets/img/favicon.ico'; // ICONE DU SITEWEB
 $logosite ='../assets/img/dragon.png'; // LOGO DU MENU DE NAVIGATION
-$avataroffline = 'http://149.202.251.64/assets/img/inconnu.jpg';// MENU CONNEXION STEAM BARRE DU HAUT
+$avataroffline = 'https://tronpa.fr/assets/img/inconnu.jpg';// MENU CONNEXION STEAM BARRE DU HAUT
 $pseudosteam = 'Inconnu';// MENU CONNEXION STEAM BARRE DU HAUT
 $bouttonprofile = 'Voir Profile';// MENU CONNEXION STEAM BARRE DU HAUT
 $pasconnecter = "Vous n'êtes pas connecté";// MENU CONNEXION STEAM BARRE DU HAUT
 $monprofile = 	'Mon Profile';// MENU CONNEXION STEAM BARRE DU HAUT
 $deconnexion = 	'Déconnexion';// MENU CONNEXION STEAM BARRE DU HAUT
 
-$avataroffline1 = 'http://149.202.251.64/assets/img/inconnu.jpg';// MENU CONNEXION STEAM
+$avataroffline1 = 'https://tronpa.fr/assets/img/inconnu.jpg';// MENU CONNEXION STEAM
 $pseudosteam1 = 'Inconnu';// MENU CONNEXION STEAM
 $pasconnecter1 = "Vous n'êtes pas connecté";// MENU CONNEXION STEAM
 $membres = 'Membres';// MENU CONNEXION STEAM
