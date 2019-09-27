@@ -1,5 +1,5 @@
 <?php 
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=mc_auth;charset=utf8', 'mc_auth', 'D23btGB36wU27d1g');
+$bdd = new PDO('mysql:host=127.0.0.1;dbname=mc_auth;charset=utf8', 'mc_auth', '');
 
 $reponse = $bdd->query('SELECT * FROM users WHERE id = '.$_SESSION['id'].'');
 
