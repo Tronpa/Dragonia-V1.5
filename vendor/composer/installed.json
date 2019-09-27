@@ -1,0 +1,42 @@
+[
+    {
+        "name": "php-minecraft/minecraft-query",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHP-Minecraft/MinecraftQuery.git",
+            "reference": "06f19c7ab74d871365108b1803bcbe5a4c769689"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/PHP-Minecraft/MinecraftQuery/zipball/06f19c7ab74d871365108b1803bcbe5a4c769689",
+            "reference": "06f19c7ab74d871365108b1803bcbe5a4c769689",
+            "shasum": ""
+        },
+        "require": {
+            "ext-iconv": "*",
+            "ext-json": "*",
+            "php": "^7.2"
+        },
+        "time": "2019-07-20T18:44:28+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "PHPMinecraft\\MinecraftQuery\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Rixafy",
+                "email": "rixafy@gmail.com"
+            }
+        ],
+        "description": "Minecraft library for retrieving server data (players, motd, favicon..)"
+    }
+]
