@@ -1,14 +1,10 @@
 <?php
 include('../include/config.php');
 
+
 session_start();
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
-}
-
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=mc_auth', 'mc_auth', 'D23btGB36wU27d1g');
+$bdd = new PDO('mysql:host=127.0.0.1;dbname=mc_auth;charset=utf8', 'mc_auth', 'D23btGB36wU27d1g');
 $req = $bdd->prepare('SELECT id, username, date, avatar, groupe, background, sex, icon, prenom, discord_profil FROM users WHERE id = ?');
 $req->execute(array($_GET['id']));
 
@@ -26,6 +22,7 @@ while ($donnees = $req->fetch())
 	<link rel="icon" href="<?php echo $iconsite?>" type="image/x-icon"/>
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+	<script type="text/javascript" src="/assets/js/upload_progress.js"></script>
 	<script>
 		WebFont.load({
 			google: {"families":["Lato:300,400,700,900"]},
@@ -73,13 +70,13 @@ while ($donnees = $req->fetch())
 			
 			<div class="row">
 					<div class="col-md-12">
-						<div class="card">
+						<div class="card" style="background-color: #0f1117;">
 							<div class="card-header">
 								<h4 class="card-title"><center>Vous êtes sur le profil de <?php echo $donnees['username']; ?></center></h4>
 							</div>
 							
-							<div class="card-body" style="background-position: center; background-image: url('../assets/img/background/<?php echo $donnees['background']; ?>')">
-								<div class="col-md-12">
+							<div class="card-body" style="background-position: center; background-repeat: no-repeat; background-size: 100% auto; height: 100%; width: auto; background-image: url('../uploads/background/<?php echo $donnees['background']; ?>')">
+								<div class="col-md-12" style="height: 500px; top:80px">
 					
 							<center>
 								<div class="avatar1">
@@ -87,19 +84,19 @@ while ($donnees = $req->fetch())
 								</div>
 							</center>
 							
-								<div class="mx-auto">
 								<p></p>
-									<center><div class="name col-md-2" style="background-color: #000c;"><font color="#FFF"><i class="<?php echo $user['icon']; ?>"></i> <?php echo $donnees['username']; ?></font> <?php echo $donnees['groupe']; ?></font></div>
+								<center>								
+									<div class="kjhgkh col-md-2" style="background-color: #000c;"> <font color="#FFF"> <i class="<?php echo $donnees['icon']; ?>"></i> <?php echo $donnees['username']; ?></font> <font size="1px" color="<?php echo $donnees['groupe_color']; ?>">(<?php echo $donnees['groupe']; ?>)</font></div>
 									<p></p>
-									<center><div class="prenom col-md-2" style="background-color: #000c;"><font color="#FFF">Prénom: <?php echo $donnees['prenom']; ?></font></div>
+									<div class="prenom col-md-2" style="background-color: #000c;"><font color="#FFF">Prénom: <?php echo $donnees['prenom']; ?></font></div>
 				
-									<center><div class="sex col-md-2" style="background-color: #000c;"><font color="#FFF">Genre: <?php echo $donnees['sex']; ?></font></div>
+									<div class="sex col-md-2" style="background-color: #000c;"><font color="#FFF">Genre: <?php echo $donnees['sex']; ?></font></div>
 									
 									<p></p>
 									<div class="job col-md-2" style="background-color: #000c;"><b><font color="#FFFFFF">Enregistré depuis le :</font></b></div>
 									<div class="desc col-md-2" style="background-color: #000c;"><b><font color="#FFFFFF">(<?php echo $donnees['date']; ?>)</font></b></div>
 									<p></p>
-								</div>
+								</center>
 							</div>
 						</div>
 						
@@ -112,7 +109,7 @@ while ($donnees = $req->fetch())
 					</div><!--ROW-->
 			
 				<div class="col-md-4">
-					<div class="card">
+					<div class="card" style="background-color: #0f1117;">
 						<div class="card-header">
 							<h4 class="card-title"><center>Rejoint le disord de <?php echo $donnees['username']; ?></center></h4>
 						</div>
@@ -133,7 +130,7 @@ while ($donnees = $req->fetch())
 				</div>	
 
 					<div class="col-md-8">
-						<div class="card">
+						<div class="card" style="background-color: #0f1117;">
 							<div class="card-header">
 								<h4 class="card-title"><center>Gaming Card</center></h4>
 							</div>
@@ -156,20 +153,11 @@ while ($donnees = $req->fetch())
 		</div><!--CONTENT-->
 
 	<?php include('../include/footer.php');?>
-	<?php include('../include/theme.php');?>
 		</div><!--MAIN PANEL-->
 
 	<!--   Core JS Files   -->
-	<script src="https://embed.twitch.tv/embed/v1.js"></script>
 
     <!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. -->
-    <script type="text/javascript">
-      new Twitch.Embed("twitch-embed", {
-        width: 854,
-        height: 480,
-        channel: "tronpa_"
-      });
-    </script>
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
 	<script src="/assets/js/core/popper.min.js"></script>
 	<script src="/assets/js/core/bootstrap.min.js"></script>

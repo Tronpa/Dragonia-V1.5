@@ -1,8 +1,9 @@
-<?php
+<?php 
+session_start(); 
 include('../include/config.php');
-session_start();
- 
- 
+include('../include/module/ban/db.php');
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -11,6 +12,10 @@ session_start();
 	<title><?php echo $sitename?></title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="<?php echo $iconsite?>" type="image/x-icon"/>
+	<meta name="autheur" content="ONX_Tronpa" />
+	<meta name="contact" content="nitrogene5110@gmail.com" />
+	<meta name="version" content="2.0" />
+	<meta name="description" content="" />
 
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
@@ -28,18 +33,18 @@ session_start();
 	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/css/style.css">
 	<link rel="stylesheet" href="../assets/css/demo.css">
-	<link rel="stylesheet" href="../assets/css/atlantis.css">
-	<link rel="stylesheet" href="../assets/css/animate.min.css">
+	<link rel="stylesheet" href="../assets/css/animate.css">
+	<link rel="stylesheet" href="../assets/css/atlantis.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
-
 <body data-background-color="dark">
-	<div class="wrapper"><!-- FIN DE PAGE -->
-	<?php include('../include/navbar.php');?>		
+<div class="wrapper">
+	<?php include('../include/navbar.php');?>	
 		<div class="main-panel">
 			<div class="content">
 				<div class="page-inner">
+				
 					<div class="page-header">
 						<h4 class="page-title">Accueil</h4>
 						<ul class="breadcrumbs">
@@ -52,33 +57,29 @@ session_start();
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="wiki-dayz.php">Documentation</a>
+								<a href="../banned.php">Banni</a>
 							</li>
 						</ul>
 					</div>
-					
-				  <div class="row">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-body">
-								<center><a href="https://gmoddayz.net"><img src="../assets/img/wiki-minecraft.png"><a></center>
-								<p><font color="#FFF">TEXTE ICI</p></font>
 							
-							
-							<p> Wiki developpé par <a href="https://steamcommunity.com/profiles/76561198007132503/"><font color="red">Tronpa</p></font>
-							</div>
-						
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card" style="background-color: #0f1117;">
+						<div class="card-body">
+						<img height="100%" width="100%" src="../assets/img/404.gif">
+						</div>
+						<div class="card-footer" style="font-size: 20px;">
+							<p><center><font color="RED">Vous êtes bannis</font></center></p>
 						</div>
 					</div>
-				  </div>
-				  
-
-			</div>
-		</div>
-	<?php include('../include/footer.php');?>
-		</div>
+				</div>
+			</div><!--ROW-->
+		</div><!--PAGE INNER-->
+	</div><!--CONTENT-->
 	
-		<!-- End Custom template -->
+	<?php include('../include/footer.php');?>
+	
+	</div><!--MAIN PANEL-->
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
 	<script src="/assets/js/core/popper.min.js"></script>
@@ -90,7 +91,6 @@ session_start();
 
 	<!-- jQuery Scrollbar -->
 	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
 
 	<!-- Chart JS -->
 	<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
@@ -119,34 +119,6 @@ session_start();
 
 	<!-- Particules -->
 	<script src="/assets/js/particles.min.js"></script>
-<script>
-<fb:login-button 
-  scope="public_profile,email"
-  onlogin="checkLoginState();">
-</fb:login-button>
-</script>
-
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{603391130134363}',
-      cookie     : true,
-      xfbml      : true,
-      version    : '{api-version}'
-    });
-      
-    FB.AppEvents.logPageView();   
-      
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
 	<script src="/assets/js/particles.js"></script>
 	<script src="/assets/js/app.js"></script>
 	<script src="/assets/js/setting-demo2.js"></script>

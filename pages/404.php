@@ -1,6 +1,9 @@
 <?php 
 include('../include/config.php');
-session_start();
+
+
+session_start(); 
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -8,9 +11,11 @@ session_start();
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title><?php echo $sitename?></title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<meta http-equiv="Content-Security-Policy" content="default-src http:">
 	<link rel="icon" href="<?php echo $iconsite?>" type="image/x-icon"/>
-
+	<meta name="autheur" content="ONX_Tronpa" />
+	<meta name="contact" content="nitrogene5110@gmail.com" />
+	<meta name="version" content="2.0" />
+	<meta name="description" content="" />
 
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
@@ -59,11 +64,11 @@ session_start();
 							
 			<div class="row">
 				<div class="col-md-12">
-					<div class="card">
+					<div class="card" style="background-color: #0f1117;">
 						<div class="card-body">
 						<img height="100%" width="100%" src="../assets/img/404.gif">
 						</div>
-						<div class="card-footer" style="font-size: 40px;">
+						<div class="card-footer" style="font-size: 20px;">
 							<p><center><font color="RED">Vous n'avez pas acces a cette page</font></center></p>
 						</div>
 					</div>
@@ -72,7 +77,6 @@ session_start();
 		</div><!--PAGE INNER-->
 	</div><!--CONTENT-->
 	
-	<?php include('../include/theme.php');?>
 	<?php include('../include/footer.php');?>
 	
 	</div><!--MAIN PANEL-->

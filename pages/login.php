@@ -1,8 +1,22 @@
 <?php
+include('../include/config.php');
 // Initialize the session
 session_start();
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
+
+$cookie_name = "dragonia-cookie";
+$ticket = session_id().microtime().rand(0,9999999999);
+$ticket = hash('sha512', $ticket);
+
+setcookie($cookie_name, $ticket, time() + (60 * 20)); // Expire au bout de 20 min
+$_SESSION['ticket'] = $ticket;
+
+setcookie($name, $value, $time);
+
+if(!isset($_COOKIE[$name])) {
+    
+}
+
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: ../pages/login.php&id=amp;".($_SESSION["id"])."");
     exit;
@@ -11,9 +25,9 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 // Include config file
 include('../include/config.php');
 require_once "../include/db/config.php";
- 
+
 // Define variables and initialize with empty values
-$username = $password = "";
+$username = $avatar = $groupe = $color_groupe = $color = $icon = $password = "";
 $username_err = $password_err = "";
  
 // Processing form data when form is submitted
@@ -36,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
+        $sql = "SELECT id, username, avatar, groupe, color_groupe, color, icon, password FROM users WHERE username = ?";
         
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -53,7 +67,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify password
                 if(mysqli_stmt_num_rows($stmt) == 1){                    
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    mysqli_stmt_bind_result($stmt, $id, $username, $avatar, $groupe, $color_groupe, $color, $icon, $hashed_password);
                     if(mysqli_stmt_fetch($stmt)){
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
@@ -63,8 +77,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username; 
-							$_SESSION["groupe_admin"] = $groupe_admin;							
-                            
+							$_SESSION['avatar'] = $avatar;
+							$_SESSION['groupe'] = $groupe;
+							$_SESSION['color_groupe'] = $color_groupe;
+							$_SESSION['color'] = $color;
+							$_SESSION['icon'] = $icon;
+							
                             // Redirect user to welcome page
                             header("location: index.php?id=&".($_SESSION["id"])."");
                         } else{
@@ -88,6 +106,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Close connection
     mysqli_close($link);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -96,6 +115,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	<title><?php echo $sitename?></title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="<?php echo $iconsite?>" type="image/x-icon"/>
+	<meta name="autheur" content="ONX_Tronpa" />
+	<meta name="contact" content="nitrogene5110@gmail.com" />
+	<meta name="version" content="2.0" />
+	<meta name="description" content="" />
 
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
@@ -123,7 +146,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	<?php include('../include/navbar.php');?>	
 		<div class="main-panel">
 			<div class="content">
-				<div class="page-inner">
+				<div style="background-image: url('https://tronpa.fr/assets/img/1.jpg'); background-repeat: no-repeat;" class="page-inner">
 				
 					<div class="page-header">
 						<h4 class="page-title">Accueil</h4>
@@ -137,20 +160,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="../index.php">Login</a>
+								<a href="../index.php">Serveur</a>
 							</li>
 						</ul>
 					</div><!--HEADER-->
 							
 			<div class="row">
 				<div class="col-md-10 mx-auto">
-					<div class="card">
-						<div class="animate bounceInLeft delay-1s card-body">
+					<div class="card" style="background-color: #0f1117;">
+						<div class="card-body">
 						<div class="card-header">
 							<center><div class="card-title">LOGIN DES UTILISATEURS</div></center>
 						</div>
 						
-
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-6 mx-auto">
@@ -165,15 +187,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 								<div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
 									<label>Mot de passe</label>
 									<input type="password" name="password" class="form-control">
-									<span class="help-block"><?php echo $password_err; ?></span>
+									<span  class="help-block"><?php echo $password_err; ?></span>
 								</div>
 								
 								<div class="form-group">
 									<input type="submit" class="btn btn-primary" value="Connexion">
 								</div>
-								<p>Je n'ai pas de compte ? <a href="register.php">S'enregistrer maintenant</a>.</p>
+								
 							</form>
-	
+									<center>Je n'ai pas de compte ? <a href="register.php">S'enregistrer maintenant</a>.</center>
 								</div>
 							</div>
 						</div>			
@@ -181,11 +203,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 					</div>
 				</div>
 			</div><!--ROW-->
-		</div>
-	</div><!--CONTENT-->
 
-	<?php include('../include/footer.php');?>
-	<?php include('../include/theme.php');?>
+				</div><!--ROW-->
+			</div><!--CONTENT-->
+	<footer class="footer1 col-md-12 mx-auto" style="background-color: #0f1117; bottom: -10px;">
+		<div class="copyright col-md-12 mx-auto">
+			<center><font color="white">© 2018-2019 développé par <a href='https://steamcommunity.com/profiles/76561198007132503/'>ONX_Tronpa</a> <i class='fa fa-heart heart text-danger'></i></font></center>
+		</div>		
+	</footer>
 		</div><!--MAIN PANEL-->
 
 	<!--   Core JS Files   -->
@@ -261,6 +286,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			fillColor: 'rgba(255, 255, 255, .15)'
 		});
 	</script>
+
 </div>
 </body>
 </html>

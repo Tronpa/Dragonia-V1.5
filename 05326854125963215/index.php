@@ -1,8 +1,14 @@
-<?php
-include('../include/config.php');
-session_start();
- 
- 
+<?php 
+session_start(); 
+
+include('../05326854125963215/includes/config.php');
+include('../include/module/users/count-players.php');
+
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: ../pages/login.php");
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -28,57 +34,111 @@ session_start();
 	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/css/style.css">
 	<link rel="stylesheet" href="../assets/css/demo.css">
-	<link rel="stylesheet" href="../assets/css/atlantis.css">
-	<link rel="stylesheet" href="../assets/css/animate.min.css">
+	<link rel="stylesheet" href="../assets/css/animate.css">
+	<link rel="stylesheet" href="../assets/css/atlantis.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
-
 <body data-background-color="dark">
-	<div class="wrapper"><!-- FIN DE PAGE -->
-	<?php include('../include/navbar.php');?>		
+	<div class="wrapper">
+	<?php include('../05326854125963215/includes/navbar.php');?>	
 		<div class="main-panel">
 			<div class="content">
-				<div class="page-inner">
-					<div class="page-header">
-						<h4 class="page-title">Accueil</h4>
-						<ul class="breadcrumbs">
-							<li class="nav-home">
-								<a href="../index.php">
-									<i class="flaticon-home"></i>
-								</a>
-							</li>
-							<li class="separator">
-								<i class="flaticon-right-arrow"></i>
-							</li>
-							<li class="nav-item">
-								<a href="wiki-dayz.php">Documentation</a>
-							</li>
-						</ul>
-					</div>
-					
-				  <div class="row">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-body">
-								<center><a href="https://gmoddayz.net"><img src="../assets/img/wiki-minecraft.png"><a></center>
-								<p><font color="#FFF">TEXTE ICI</p></font>
-							
-							
-							<p> Wiki developpé par <a href="https://steamcommunity.com/profiles/76561198007132503/"><font color="red">Tronpa</p></font>
+				<div class="panel-header" style="background-color: #9e0d0d;">
+					<div class="page-inner py-5">
+						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+							<div>
+								<h2 class="text-white pb-2 fw-bold">Administration Dragonia</h2>
+								<h5 class="text-white op-7 mb-2">Version du panel V1.5</h5>
 							</div>
-						
+							<div class="ml-md-auto py-2 py-md-0">
+								<a href="../pages/index.php" class="btn btn-white btn-border btn-round mr-2">Accueil</a>
+							</div>
 						</div>
 					</div>
-				  </div>
-				  
+				</div>
+			<p></p>	
+				<div class="card col-md-11 mx-auto" style="background-color: #0f1117;">
+					<div class="card-header">
+						<h4 class="card-title"><center>Statistiques & Enregistrements</center></h4>
+					</div>
+			
+			<div class="card" style="background-color: #0f1117;">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-sm-6 col-md-4">
+							<div class="card card-stats card-primary card-round">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-5">
+											<div class="icon-big text-center">
+												<i class="flaticon-users"></i>
+											</div>
+										</div>
+										<div class="col-7 col-stats">
+											<div class="numbers">
+												<p class="card-category">Membres</p>
+												<h4 class="card-title"><?php echo $membercount ?></h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-sm-6 col-md-4">
+							<div class="card card-stats card-secondary card-round">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-5">
+											<div class="icon-big text-center">
+												<i class="icon-screen-desktop"></i>
+											</div>
+										</div>
+										<div class="col-7 col-stats">
+											<div class="numbers">
+												<p class="card-category">Serveur</p>
+												<h4 class="card-title">1</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-sm-6 col-md-4">
+							<div class="card card-stats card-info card-round">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-5">
+											<div class="icon-big text-center">
+												<i class="icon-bubble"></i>
+											</div>
+										</div>
+										<div class="col-7 col-stats">
+											<div class="numbers">
+												<p class="card-category">Messages</p>
+												<h4 class="card-title">1303</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
+				<div class="card-footer card-footer col-md-12">
+				</div>
 			</div>
 		</div>
-	<?php include('../include/footer.php');?>
-		</div>
-	
-		<!-- End Custom template -->
+</div>
+	</div>
+	</div>
+	<footer class="footer1 col-md-12 mx-auto" style="background-color: #0f1117; bottom: -10px;">
+		<div class="copyright col-md-12 mx-auto">
+			<center><font color="white">© 2018-2019 développé par <a href='https://steamcommunity.com/profiles/76561198007132503/'>ONX_Tronpa</a> <i class='fa fa-heart heart text-danger'></i></font></center>
+		</div>		
+	</footer>
+
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
 	<script src="/assets/js/core/popper.min.js"></script>
@@ -119,34 +179,6 @@ session_start();
 
 	<!-- Particules -->
 	<script src="/assets/js/particles.min.js"></script>
-<script>
-<fb:login-button 
-  scope="public_profile,email"
-  onlogin="checkLoginState();">
-</fb:login-button>
-</script>
-
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{603391130134363}',
-      cookie     : true,
-      xfbml      : true,
-      version    : '{api-version}'
-    });
-      
-    FB.AppEvents.logPageView();   
-      
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
 	<script src="/assets/js/particles.js"></script>
 	<script src="/assets/js/app.js"></script>
 	<script src="/assets/js/setting-demo2.js"></script>
@@ -181,6 +213,8 @@ session_start();
 			fillColor: 'rgba(255, 255, 255, .15)'
 		});
 	</script>
+
 </div>
 </body>
 </html>
+

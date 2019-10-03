@@ -1,5 +1,6 @@
 <?php
-require ('config.php');
+include('../include/config.php');
+include('../includes/db/auth_admin.php');
 
 $bdd = new PDO('mysql:host=127.0.0.1;dbname=mc_auth', 'mc_auth', 'D23btGB36wU27d1g');
 
@@ -14,7 +15,7 @@ if(isset($_SESSION['id'])) {
 	<div class="main-header">
 		<!-- Logo Header -->
 		<div class="logo-header" style="background-color: #0f1117;">
-			<a href="../pages/index.php?id=&amp;" class="logo">
+			<a href="../05326854125963215/index.php?id=&amp;" class="logo">
 				<img src="<?php echo $logosite?>" width="50px" height="35px" alt="navbar brand" class="navbar-brand">
 				<font color="WHITE"></font>
 			</a>
@@ -33,12 +34,16 @@ if(isset($_SESSION['id'])) {
 		<!-- End Logo Header -->
 		
 			<!-- Navbar Header -->
-
 			<nav class="navbar navbar-header navbar-expand-lg" style="background-color: #0f1117;">
 				<div class="container-fluid">
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+						<li class="nav-item toggle-nav-search hidden-caret">
+							<a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
+								<i class="fa fa-search"></i>
+							</a>
+						</li>
 
-
+					
 					<?php
 					if (isset($_SESSION['id']) AND isset($_SESSION['username']))
 					{
@@ -58,11 +63,9 @@ if(isset($_SESSION['id'])) {
 									
 									<li>
 										<div class='dropdown-divider'></div>
-										 ".$user['admin']."
+										<a class='dropdown-item' href='../pages/profil.php?id=&amp;".$user['id']."_users=".$user['username']."'>Paramètres</a>
 										<div class='dropdown-divider'></div>
-										<a class='dropdown-item' href='../pages/profil.php?id=".$user['id']."&users=".$user['username']."'>Paramètres</a>
-										<div class='dropdown-divider'></div>
-										<a class='dropdown-item' href='logout.php'>Déconnexion</a>	
+										<a class='dropdown-item' href='../pages/logout.php'>Déconnexion</a>	
 									</li>
 									 
 									</li>
@@ -89,16 +92,15 @@ if(isset($_SESSION['id'])) {
 						<div class='info'>
 
 						<div class='avatar avatar-online avatar-sm float-left mr-3'>
-							<img src='../uploads/avatar/".$user['avatar']."' alt='...' class='avatar-img rounded-circle'>
+							<img src='/uploads/avatar/".$user['avatar']."' alt='...' class='avatar-img rounded-circle'>
 						</div>
 								<a>
 								<span>";
-									echo '<font color="white ">' .$user['username']. ' ';
+									echo '<font color="white ">'  .$user['username'].  '</font>';
 									
 									echo "
-									<span class='user-level'>
-									</font> <font size='1px' color='" .$user['color_groupe']. "'> ("  .$user['groupe'].  ")</font>";
-									
+									<span class='user-level'>";
+									echo '<font color="white ">'  .$user['groupe'].  '</font>';
 									echo "
 									</span>
 								</span>
@@ -116,43 +118,21 @@ if(isset($_SESSION['id'])) {
 							<h4 class="text-section"><?php echo $nomnavigation?></h4>
 						</li>
 						<li class="nav-item">
-							<a href="<?php echo $accueilhref?>">
-								<i class="<?php echo $logoaccueil?>"></i>
-								<p><?php echo $nomaccueil?></p>
-							</a>
-							<a href="../pages/salon_textuel.php?id=<?php echo $user['id'] ?>&username=<?php echo $user['username'] ?>">
-								<i class="fab fa-rocketchat"></i>
-								<p>Salon Textuel</p>
-							</a>
-							<a href="../pages/liste-membres.php?id=<?php echo $user['id'] ?>&username=<?php echo $user['username'] ?>">
+							<a href="../05326854125963215/gestion-users.php">
 								<i class="fas fa-users"></i>
-								<p>Membres</p>
+								<p>Gestion des membres</p>
 							</a>
-							<a href="<?php echo $invitationdiscord?>">
-								<i class="<?php echo $logodiscord?>"></i>
-								<p><?php echo $nomdiscord?></p>
+							
+						<a href="../05326854125963215/gestion-serveur.php">
+							<i class="fas fa-server"></i>
+								<p>Gestion des serveurs</p>
 							</a>
-							<a href="<?php echo $banshref?>">
-								<i class="<?php echo $logosourceban?>"></i>
-								<p><?php echo $nommenusourceban?></p>
-							</a>
-							<a href="../pages/update-notes.php?id=<?php echo $user['id'] ?>&username=<?php echo $user['username'] ?>">
+							<a href="../05326854125963215/gestion-update.php">
 								<i class="fas fa-bullhorn"></i>
-								<p>Update</p>
+								<p>Gestion des updates</p>
 							</a>
 						</li>
-						
-						<li class="nav-section">
-							<span class="sidebar-mini-icon">
-							</span>
-							<h4 class="text-section">Wiki & Aide</h4>
-						</li>
-						
-						<li class="nav-item">
-							<a href="../pages/wiki-minecraft.php?id=<?php echo $user['id'] ?>&username=<?php echo $user['username'] ?>">
-								<i class="fas fa-biohazard"></i>
-								<p>Documentation</p>
-							</a>
+										
 					</ul>
 				</div>
 			</li>
