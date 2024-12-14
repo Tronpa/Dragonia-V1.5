@@ -2,12 +2,6 @@
 include('../include/config.php');
 session_start();
 
-// Check if the user is logged in, if not then redirect him to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -43,7 +37,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 	<?php include('../include/navbar.php');?>	
 		<div class="main-panel">
 			<div class="content">
-				<div class="page-inner">
+				<div class="page-inner" style="background-image: url('https://tronpa.fr/assets/img/1.jpg'); background-repeat: no-repaet;">
 				
 					<div class="page-header">
 						<h4 class="page-title">Accueil</h4>
@@ -62,22 +56,19 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 						</ul>
 					</div><!--HEADER-->
 							
-			<div class="row">
-				<div class="col-12">
-					<div class="card">
-						<div class="card-body">
-							<?php include('../include/module/timeline/index.php');?>
+					<div class="row">
+						<div class="col-12">
+							<div class="card" style="background-color: #0f1117;">
+								<div class="card-body">
+									<?php include('../include/module/timeline/index.php');?>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
-			</div><!--ROW-->
-			
+					</div><!--ROW-->
 				</div>
 			</div><!--CONTENT-->
-
-<?php include('../include/footer.php');?>
+		<?php include('../include/footer.php');?>
 		</div><!--MAIN PANEL-->
- <?php include('../include/theme.php');?>
 
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
@@ -90,7 +81,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
 	<!-- jQuery Scrollbar -->
 	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
 
 	<!-- Chart JS -->
 	<script src="/assets/js/plugin/chart.js/chart.min.js"></script>

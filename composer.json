@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php-minecraft/minecraft-query": "^1.0",
+        "php-curl-class/php-curl-class": "@dev"
+    }
+}

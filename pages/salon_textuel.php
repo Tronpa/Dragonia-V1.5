@@ -2,11 +2,51 @@
 include('../include/config.php');
 session_start();
 
+$donnees = $d;
+$donnees['id'] = $d['id'];
+$donnees['username'] = $d['username'];
+$donnees['avatar'] = $d['avatar'];
+$donnees['icon'] = $d['icon'];
+$donnees['groupe'] = $d['groupe'];
+$donnees['color_groupe'] = $d['color_groupe'];
+$donnees['date'] = $d['date'];
+
+$bdd = new PDO('mysql:host=127.0.0.1;dbname=mc_auth;charset=utf8', 'mc_auth', 'D23btGB36wU27d1g');
+
+
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
- 
+
+if(isset($_SESSION['id'])) {
+   $requser = $bdd->prepare("SELECT * FROM users WHERE id = ?");
+   $requser->execute(array($_SESSION['id']));
+   $id = $_SESSION['id'];
+   $user = $requser->fetch();
+
+   
+if(isset($_POST['textuel']) AND isset($_SESSION['id']) AND !empty($_POST['message'])) {
+
+   $id = htmlspecialchars($_SESSION['id']);
+   $username = htmlspecialchars($_SESSION['username']);
+   $avatar = htmlspecialchars($_SESSION['avatar']);
+   $groupe = htmlspecialchars($_SESSION['groupe']);
+   $color_groupe = htmlspecialchars($_SESSION['color_groupe']);
+   $color = htmlspecialchars($_SESSION['color']);
+   $icon = htmlspecialchars($_SESSION['icon']);
+   $message = htmlspecialchars($_POST['message']);
+   $reqmessage = $bdd->prepare("SELECT * FROM texteul WHERE id = ?");
+   $reqmessage->execute(array($id));
+   $insertmbr = $bdd->prepare("INSERT INTO textuel(id, username, avatar, groupe, color_groupe, color, icon, message) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+   $insertmbr->execute(array($id, $username, $avatar, $groupe, $color_groupe, $color, $icon, $message));
+   header("location: salon_textuel.php?id=".$_SESSION['id']."");
+
+}
+
+}
+
+$reponse = $bdd->query('SELECT * FROM textuel ORDER BY date ASC LIMIT 20') or die(print_r($bdd->errorInfo()));
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -65,80 +105,66 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 						</ul>
 					</div><!--HEADER-->
 							
-			<div class="row">
-				<div class="col-md-12">
-					<div class="card" style="background-color: #00000000;">
-						<div class="card-body">
-							<?php include('../include/module/carousel/index.php');?>
-						</div>
+						<div class="row">
+							<div class="card col-md-9" style="background-color: #0f1117;">
+								<div class="card-header">
+									<div class="card-title"><center>Salon Textuel (BETA)</center></div>
+								</div>
+								
+								<div class='card-body'>
+
+								
+								<?php while ($d = $reponse->fetch()) {
+								echo "
+								<div class='avatar-salon-textuel'>
+									<img class='rounded-circle' height='48' width='48' src='../uploads/avatar/".$d['avatar']."'/>
+								</div>	
+								
+								<div class='pseudo-salon-textuel'>
+									<font size='2px' color='#fff'><b><i class='".$d['icon']."'></i><a href='../pages/view_profil.php?id=".$d['id']."'>".$d['username']."</a></font> <font size='1px' color='".$d['color_groupe']."'>(".$d['groupe'].")</font> <font size='1px' color='white'>(".$d['date'].")</b></font>
+								</div>	
+							
+								<div class='message-salon-textuel'>
+									<font size='2px' color='#fff'> ".$d['message']."</font>
+								</div>";
+								
+								?> <?php } $reponse->closeCursor(); ?>
+
+							<form action="" method="post" enctype="multipart/form-data">
+								<div class="card-footer">
+									<div class="form-group">
+										<textarea class="form-control" name="message" rows="5"></textarea>
+									</div>
+									<button name="textuel" class="btn btn-default">Envoyer</button>
+								</div>
+							</form>
+								<center><p><font size='5px' color='red'></font></p></center>
+							</div>
+							</div>
+					
+				
+				<div class='col-md-3 ml-auto'>
+					<div class="modules">
+						<?php include('../include/module/users/membre-en-ligne.php');?>
+						<?php include('../include/module/users/liste-salons.php');?>
 					</div>
 				</div>
 				
-							<div class="card col-md-9" style="background-color: #0f1117;">
-								<div class="card-header">
-									<div class="card-title"><center>Liste des serveurs</center></div>
-								</div>
-								<div class="card-body">
-									<table class="table table-head-bg-primary">
-										<thead>
-											<tr>
-												<th scope="col">OS</th>
-												<th scope="col">GAMES</th>
-												<th scope="col">HOSTNAME</th>
-												<th scope="col">PLAYERS</th>
-												<th scope="col">MAPS</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td><img src="../assets/img/linux-icon.png" height="24" width="24"/></td>
-												<td><img src="../assets/img/280px-Gmodlogo.svg.png" height="24" width="24"/></td>
-												<td><b><font color='#00A6FF'>[FR] [FR] SERVEUR GARRYS MOD 1</b></font></td>
-												<td><font color='#219711'> 12/64 </font></b></td>
-												<td><b><font color='#971399'> ph_restaurant </font></b></td>
-											</tr>
-											
-											<tr>
-												<td><img src='../assets/img/linux-icon.png' height='24' width='24'/></td>
-												<td><img src='../assets/img/280px-Gmodlogo.svg.png' height='24' width='24'/></td>
-												<td><b><font color='#00A6FF'>[FR] SERVEUR GARRYS MOD 2</font></b></td>
-												<td><b><font color='#219711'> 28/64</font></b></td>
-												<td><b><font color='#971399'> rp_stalker</font></b></td>
-											</tr>
-											
-											<tr>
-												<td><img src='../assets/img/linux-icon.png' height='24' width='24'/></font></b></td>
-												<td><img src='../assets/img/280px-Gmodlogo.svg.png' height='24' width='24'/></font></b></td>
-												<td><b><font color='#00A6FF'>[FR] SERVEUR GARRYS MOD 3</font></b></td>
-												<td><b><font color='#219711'> 8/15</font></b></td>
-												<td><b><font color='#971399'> mb_meelonbomber</font></b></td>
-											</tr>
-											
-											<tr>
-												<td><img src='../assets/img/linux-icon.png' height='24' width='24'/></td>
-												<td><img src='../assets/img/minecraft.png' height='24' width='24'/></td>  
-												<td><b><font color='#00A6FF'>[FR] SERVEUR MINECRAFT 1</font></b></td>
-												<td><b><font color='#219711'> 62/999</font></b></td>
-												<td><b><font color='#971399'> word_maps</font></b></td>
-											</tr>
-											
-										</tbody>
-									</table>
-								</div>
-							</div>
-			
-				<div class='col-md-3 ml-auto'>
-					<div class="modules-inscrit">
-						<?php include('../include/module/users/membre-inscrit.php');?>
-						<?php include('../include/module/users/module-workshop.php');?>
-					</div>
-				</div>
 			</div>
 		</div><!--ROW-->
 	</div><!--CONTENT-->
 
-<?php include('../include/footer.php');?>
-		</div><!--MAIN PANEL-->
+		<?php include('../include/module/users/user_nbr_live.php'); ?>
+		<footer class="footer1 col-md-12 mx-auto" style="background-color: #0f1117; top: 10px;">
+		<div class="copyright float-left col-md-4">
+		<font color="white">Actuellement <?php echo $user_nbr; ?> utilisateur<?php if($user_nbr != 1) { echo "s"; } ?> en ligne <br />
+		</div>
+		<div class="copyright col-md-6 mx-auto">
+			<center><font color="white">© 2018-2019 développé par <a href='https://steamcommunity.com/profiles/76561198007132503/'>ONX_Tronpa</a> <i class='fa fa-heart heart text-danger'></i></font></center>
+		</div>		
+		</footer>
+
+</div><!--MAIN PANEL-->
 
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
@@ -151,7 +177,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
 	<!-- jQuery Scrollbar -->
 	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-
 
 	<!-- Chart JS -->
 	<script src="/assets/js/plugin/chart.js/chart.min.js"></script>
@@ -186,34 +211,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 	<script src="/assets/js/demo.js"></script>
 	<script src="/assets/js/carousel.js"></script>
 	<script src="/assets/js/collapse.js"></script>
-	<script>
-		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart2').sparkline([99,125,122,105,110,124,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-
-		$('#lineChart3').sparkline([105,103,123,100,95,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: 'rgba(255, 255, 255, .5)',
-			fillColor: 'rgba(255, 255, 255, .15)'
-		});
-	</script>
 
 </div>
 </body>

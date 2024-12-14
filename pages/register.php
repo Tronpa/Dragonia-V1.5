@@ -246,7 +246,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <?php include('../include/footer.php');?>
 		</div><!--MAIN PANEL-->
- <?php include('../include/theme.php');?>
 
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>

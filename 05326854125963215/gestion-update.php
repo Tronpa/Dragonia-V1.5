@@ -1,8 +1,12 @@
-<?php
-include('../include/config.php');
-session_start();
- 
- 
+<?php 
+session_start(); 
+include('../05326854125963215/includes/config.php');
+include('../05326854125963215/includes/db/auth_admin.php');
+
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -28,18 +32,18 @@ session_start();
 	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../assets/css/style.css">
 	<link rel="stylesheet" href="../assets/css/demo.css">
-	<link rel="stylesheet" href="../assets/css/atlantis.css">
-	<link rel="stylesheet" href="../assets/css/animate.min.css">
+	<link rel="stylesheet" href="../assets/css/animate.css">
+	<link rel="stylesheet" href="../assets/css/atlantis.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
-
 <body data-background-color="dark">
-	<div class="wrapper"><!-- FIN DE PAGE -->
-	<?php include('../include/navbar.php');?>		
+	<div class="wrapper">
+	<?php include('../05326854125963215/includes/navbar.php');?>	
 		<div class="main-panel">
 			<div class="content">
 				<div class="page-inner">
+				
 					<div class="page-header">
 						<h4 class="page-title">Accueil</h4>
 						<ul class="breadcrumbs">
@@ -52,33 +56,38 @@ session_start();
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="wiki-dayz.php">Documentation</a>
+								<a href="../index.php">Index</a>
 							</li>
 						</ul>
-					</div>
-					
-				  <div class="row">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-body">
-								<center><a href="https://gmoddayz.net"><img src="../assets/img/wiki-minecraft.png"><a></center>
-								<p><font color="#FFF">TEXTE ICI</p></font>
+					</div><!--HEADER-->
 							
-							
-							<p> Wiki developpé par <a href="https://steamcommunity.com/profiles/76561198007132503/"><font color="red">Tronpa</p></font>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+							<div class="card-header">
+								<h4 class="card-title"><center>Modifier/Ajouter une mise a jour</center></h4>
 							</div>
 						
-						</div>
-					</div>
-				  </div>
-				  
 
+						<div class='card-body'>
+							<div class='card-body'>
+												
+									</div>
+								</div>
+							</div> 
+						<div class='card-footer'>
+						
+						</div>
+				</div>
 			</div>
 		</div>
-	<?php include('../include/footer.php');?>
-		</div>
-	
-		<!-- End Custom template -->
+	</div><!--ROW-->
+</div><!--CONTENT-->
+
+<?php include('../05326854125963215/includes/footer.php');?>
+		</div><!--MAIN PANEL-->
+ <?php include('../include/theme.php');?>
+
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
 	<script src="/assets/js/core/popper.min.js"></script>
@@ -119,34 +128,6 @@ session_start();
 
 	<!-- Particules -->
 	<script src="/assets/js/particles.min.js"></script>
-<script>
-<fb:login-button 
-  scope="public_profile,email"
-  onlogin="checkLoginState();">
-</fb:login-button>
-</script>
-
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{603391130134363}',
-      cookie     : true,
-      xfbml      : true,
-      version    : '{api-version}'
-    });
-      
-    FB.AppEvents.logPageView();   
-      
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
 	<script src="/assets/js/particles.js"></script>
 	<script src="/assets/js/app.js"></script>
 	<script src="/assets/js/setting-demo2.js"></script>
@@ -181,6 +162,7 @@ session_start();
 			fillColor: 'rgba(255, 255, 255, .15)'
 		});
 	</script>
+
 </div>
 </body>
 </html>

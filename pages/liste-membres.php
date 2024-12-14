@@ -1,7 +1,19 @@
 <?php
 include('../include/config.php');
 include('../include/module/users/count-players.php');
+
 session_start();
+
+$donnees = $d;
+$donnees['id'] = $d['id'];
+$donnees['username'] = $d['username'];
+$donnees['avatar'] = $d['avatar'];
+$donnees['icon'] = $d['icon'];
+$donnees['groupe'] = $d['groupe'];
+$donnees['color_groupe'] = $d['color_groupe'];
+$donnees['date'] = $d['date'];
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -10,6 +22,10 @@ session_start();
 	<title><?php echo $sitename?></title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="<?php echo $iconsite?>" type="image/x-icon"/>
+	<meta name="autheur" content="ONX_Tronpa" />
+	<meta name="contact" content="nitrogene5110@gmail.com" />
+	<meta name="version" content="2.0" />
+	<meta name="description" content="" />
 
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
@@ -30,8 +46,8 @@ session_start();
 	<link rel="stylesheet" href="../assets/css/animate.css">
 	<link rel="stylesheet" href="../assets/css/atlantis.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-</head>
 
+</head>
 <body data-background-color="dark">
 	<div class="wrapper">
 	<?php include('../include/navbar.php');?>	
@@ -51,57 +67,69 @@ session_start();
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="../profil.php">Modifier mon compte</a>
+								<a href="../index.php">Serveur</a>
 							</li>
 						</ul>
-					</div>
+					</div><!--HEADER-->
 							
 					<div class="row">
 						<div class="col-md-12">
-							<div class="card">
+							<div class="card" style="background-color: #0f1117;">
 								<div class="card-header">
 									<h4 class="card-title"><center>LISTE DES MEMBRES ENREGISTRER</center></h4>
 								</div>
 
-								<div class='card-body'>
-									<div class='table-responsive'>
-										<table id="#basic-datatables" class='display table table-striped table-hover'>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table id="" class="display table table-striped table-hover">
 											<thead>
 												<tr>
-													<th class="bg-primary"><b><font color='#FFF'>ID</th></font></b>
-													<th class="bg-primary"><b><font color='#FFF'>AVATAR</th></font></b>
-													<th class="bg-primary"><b><font color='#FFF'>PSEUDO</th></font></b>
-													<th class="bg-primary"><b><font color='#FFF'>INSCRIPTION</th></font></b>
-													<th class="bg-primary"><b><font color='#FFF'></th></font></b>
+													<th class="bg-primary"><b><font color="#FFF">ID</th></font></b>
+													<th class="bg-primary"><b><font color="#FFF">AVATAR</th></font></b>
+													<th class="bg-primary"><b><font color="#FFF">PSEUDO</th></font></b>
+													<th class="bg-primary"><b><font color="#FFF">INSCRIPTION</th></font></b>
+													<th class="bg-primary"><b><font color="#FFF"></th></font></b>
 												</tr>
 											</thead>
 											<tbody>
-											<?php 
-												$reponse = $bdd->query('SELECT * FROM users ORDER BY id ASC'); while ($donnees = $reponse->fetch()) {
+											<?php
+												$reponse = $bdd->query('SELECT * FROM users ORDER BY id ASC'); while ($d = $reponse->fetch()) {
+												date_default_timezone_set('Europe/Paris');
+												setlocale(LC_TIME, 'fr_FR','French');
+
 												echo "
 												<tr>
-													<td><font color='#FFF'>".$donnees['id']."</td></font></b>
-													<td><img height='48px' width='48px' style='border: solid; border-color: #00d0ff9c; ' src='../uploads/avatar/".$donnees['avatar']."' class='rounded-circle''></td></b>
-													<td><font color='#FFF'><i class='".$donnees['icon']."'></i> ".$donnees['username']." ".$donnees['groupe']."</td></font></b>
-													<td><font color='#FFF'>(".$donnees['date'].")</td></font></b>
-													<td><font color='#FFF'><a href='../pages/view_profil.php?id=".$donnees['id']."'>Voir le profil</td></font></b>
+													<td><font color='#FFF'>".$d['id']."</td></font></b>
+													<td><img height='48px' width='48px' style='border: solid; border-color: #00d0ff9c; ' src='../uploads/avatar/".$d['avatar']."' class='rounded-circle''></td></b>
+													<td><font color='#FFF'><i class='".$d['icon']."'></i> ".$d['username']." </font><font size='1px' color=".$d['color_groupe'].">(".$d['groupe'].")</td></font></b>
+													<td><font color='#FFF'> ".$d['date']." </td></font></b>
+													<td><font color='#FFF'><a href='../pages/view_profil.php?id=".$d['id']."'>Voir le profil</td></font></b>
 												</tr>";?> <?php } $reponse->closeCursor(); ?>
 											</tbody>
 										</table>
 									</div>
-							<div class="card-footer">
+									<div class="card-footer">
+									<p></p>
 								 <p><center><font color="white">Utilisateurs enregistrés</font> <font color="green">[ <?php echo $membercount;?> ]</p></center></font>
 							</div>
 						</div> 
 					</div>
 				</div>
 			</div><!--ROW-->
-		</div>
+		</div><!--ROW-->
 	</div><!--CONTENT-->
 
-	<?php include('../include/footer.php');?>
-	<?php include('../include/theme.php');?>
+		<?php include('../include/module/users/user_nbr_live.php'); ?>
+		<footer class="footer1 col-md-12 mx-auto" style="background-color: #0f1117; top: 10px;">
+		<div class="copyright float-left col-md-4">
+		<font color="white">Actuellement <?php echo $user_nbr; ?> utilisateur<?php if($user_nbr != 1) { echo "s"; } ?> en ligne <br />
+		</div>
+		<div class="copyright col-md-6 mx-auto">
+			<center><font color="white">© 2018-2019 développé par <a href='https://steamcommunity.com/profiles/76561198007132503/'>ONX_Tronpa</a> <i class='fa fa-heart heart text-danger'></i></font></center>
+		</div>		
+		</footer>
 		</div><!--MAIN PANEL-->
+
 	<!--   Core JS Files   -->
 	<script src="/assets/js/core/jquery.3.2.1.min.js"></script>
 	<script src="/assets/js/core/popper.min.js"></script>
@@ -148,56 +176,35 @@ session_start();
 	<script src="/assets/js/demo.js"></script>
 	<script src="/assets/js/carousel.js"></script>
 	<script src="/assets/js/collapse.js"></script>
+	<script>
+		$('#lineChart').sparkline([102,109,120,99,110,105,115], {
+			type: 'line',
+			height: '70',
+			width: '100%',
+			lineWidth: '2',
+			lineColor: 'rgba(255, 255, 255, .5)',
+			fillColor: 'rgba(255, 255, 255, .15)'
+		});
 
-<script >
-		$(document).ready(function() {
-			$('#basic-datatables').DataTable({
-			});
+		$('#lineChart2').sparkline([99,125,122,105,110,124,115], {
+			type: 'line',
+			height: '70',
+			width: '100%',
+			lineWidth: '2',
+			lineColor: 'rgba(255, 255, 255, .5)',
+			fillColor: 'rgba(255, 255, 255, .15)'
+		});
 
-			$('#multi-filter-select').DataTable( {
-				"pageLength": 5,
-				initComplete: function () {
-					this.api().columns().every( function () {
-						var column = this;
-						var select = $('<select class="form-control"><option value=""></option></select>')
-						.appendTo( $(column.footer()).empty() )
-						.on( 'change', function () {
-							var val = $.fn.dataTable.util.escapeRegex(
-								$(this).val()
-								);
-
-							column
-							.search( val ? '^'+val+'$' : '', true, false )
-							.draw();
-						} );
-
-						column.data().unique().sort().each( function ( d, j ) {
-							select.append( '<option value="'+d+'">'+d+'</option>' )
-						} );
-					} );
-				}
-			});
-
-			// Add Row
-			$('#add-row').DataTable({
-				"pageLength": 5,
-			});
-
-			var action = '<td> <div class="form-button-action"> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
-
-			$('#addRowButton').click(function() {
-				$('#add-row').dataTable().fnAddData([
-					$("#id").val(),
-					$("#username").val(),
-					$("#avatar").val(),
-					$("#date").val(),
-					action
-					]);
-				$('#addRowModal').modal('hide');
-
-			});
+		$('#lineChart3').sparkline([105,103,123,100,95,105,115], {
+			type: 'line',
+			height: '70',
+			width: '100%',
+			lineWidth: '2',
+			lineColor: 'rgba(255, 255, 255, .5)',
+			fillColor: 'rgba(255, 255, 255, .15)'
 		});
 	</script>
+
 </div>
 </body>
 </html>

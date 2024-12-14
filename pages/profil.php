@@ -1,9 +1,59 @@
 <?php
-include('../include/config.php');	
+include('../include/config.php');
 session_start();
- 
+
+$donnees = $d;
+$donnees['id'] = $d['id'];
+$donnees['username'] = $d['username'];
+$donnees['avatar'] = $d['avatar'];
+$donnees['icon'] = $d['icon'];
+$donnees['groupe'] = $d['groupe'];
+$donnees['color_groupe'] = $d['color_groupe'];
+$donnees['date'] = $d['date'];
+$user = $u;
+
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+
 $bdd = new PDO('mysql:host=127.0.0.1;dbname=mc_auth', 'mc_auth', 'D23btGB36wU27d1g');
 
+setlocale (LC_TIME, 'fr_FR.utf8','fra'); 
+
+if(isset($_GET['id']) AND $_GET['id'] > 0) {
+   $getid = intval($_GET['id']);
+   $requser = $bdd->prepare('SELECT * FROM users WHERE id = ?');
+   $requser->execute(array($getid));
+   $userinfo = $requser->fetch();
+
+ 
+if(isset($_FILES['background']) AND !empty($_FILES['background']['name'])) {
+   $tailleMax = 100000000000000000000;
+   $extensionsValides1 = array('jpg', 'jpeg', 'png');
+   if($_FILES['background']['size'] <= $tailleMax) {
+      $extensionUpload1 = strtolower(substr(strrchr($_FILES['background']['name'], '.'), 1));
+      if(in_array($extensionUpload1, $extensionsValides1)) {
+         $chemin = "/var/www/html/uploads/background/".$_SESSION['id'].".".$extensionUpload1;
+         $resultat = move_uploaded_file($_FILES['background']['tmp_name'], $chemin);
+         if($resultat) {
+            $updatebackground = $bdd->prepare('UPDATE users SET background = :background WHERE id = :id');
+            $updatebackground->execute(array(
+               'background' => $_SESSION['id'].".".$extensionUpload1,
+               'id' => $_SESSION['id']
+               ));
+
+         } else {
+            $msg = "<font color='red'></b>Erreur durant l'importation de votre photo de profil</font></b>";
+         }
+      } else {
+         $msg = "<font color='red'></b>Votre photo de profil doit être au format jpg, jpeg ou png</font></b>";
+      }
+   } else {
+      $msg = "<font color='red'>Votre photo de profil ne doit pas dépasser 10Mo</font></b>";
+   }
+}
+ 
 if(isset($_FILES['avatar']) AND !empty($_FILES['avatar']['name'])) {
    $tailleMax = 10000000;
    $extensionsValides = array('jpg', 'jpeg', 'png');
@@ -34,7 +84,7 @@ if(isset($_SESSION['id'])) {
    $requser = $bdd->prepare("SELECT * FROM users WHERE id = ?");
    $requser->execute(array($_SESSION['id']));
    $id = $_SESSION['id'];
-   $user = $requser->fetch();
+   $u = $requser->fetch();
    
    if(isset($_SESSION['id'])) {
       $ip = htmlspecialchars($_SERVER['REMOTE_ADDR']);
@@ -43,7 +93,7 @@ if(isset($_SESSION['id'])) {
 
    }
    
-   if(isset($_POST['discord_profil']) AND !empty($_POST['discord_profil']) AND $_POST['discord_profil'] != $user['pseudo']) {
+   if(isset($_POST['discord_profil']) AND !empty($_POST['discord_profil']) AND $_POST['discord_profil'] != $u['pseudo']) {
 	  
       $discord_profil = htmlspecialchars($_POST['discord_profil']);
       $insertdiscord = $bdd->prepare("UPDATE users SET discord_profil = ? WHERE id = ?");
@@ -51,98 +101,98 @@ if(isset($_SESSION['id'])) {
       header('Location: profil.php?id='.$_SESSION['id']);
    }
    
-   if(isset($_POST['profil_steam']) AND !empty($_POST['profil_steam']) AND $_POST['profil_steam'] != $user['pseudo']) {
+   if(isset($_POST['profil_steam']) AND !empty($_POST['profil_steam']) AND $_POST['profil_steam'] != $u['pseudo']) {
       $profil_steam = htmlspecialchars($_POST['profil_steam']);
       $insertprofils_steam = $bdd->prepare("UPDATE users SET profil_steam = ? WHERE id = ?");
       $insertprofils_steam->execute(array($profil_steam, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    } 
    
-   if(isset($_POST['profil_bnet']) AND !empty($_POST['profil_bnet']) AND $_POST['profil_bnet'] != $user['pseudo']) {
+   if(isset($_POST['profil_bnet']) AND !empty($_POST['profil_bnet']) AND $_POST['profil_bnet'] != $u['pseudo']) {
       $profil_bnet = htmlspecialchars($_POST['profil_bnet']);
       $insertprofils_bnet = $bdd->prepare("UPDATE users SET profil_bnet = ? WHERE id = ?");
       $insertprofils_bnet->execute(array($profil_bnet, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    } 
    
-   if(isset($_POST['profil_discord']) AND !empty($_POST['profil_discord']) AND $_POST['profil_discord'] != $user['pseudo']) {
+   if(isset($_POST['profil_discord']) AND !empty($_POST['profil_discord']) AND $_POST['profil_discord'] != $u['pseudo']) {
       $profil_discord = htmlspecialchars($_POST['profil_discord']);
       $insertprofils_discord = $bdd->prepare("UPDATE users SET profil_discord = ? WHERE id = ?");
       $insertprofils_discord->execute(array($profil_discord, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    } 
    
-   if(isset($_POST['profil_youtube']) AND !empty($_POST['profil_youtube']) AND $_POST['profil_youtube'] != $user['pseudo']) {
+   if(isset($_POST['profil_youtube']) AND !empty($_POST['profil_youtube']) AND $_POST['profil_youtube'] != $u['pseudo']) {
       $profil_youtube = htmlspecialchars($_POST['profil_youtube']);
       $insertprofils_youtube = $bdd->prepare("UPDATE users SET profil_youtube = ? WHERE id = ?");
       $insertprofils_youtube->execute(array($profil_youtube, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    } 
  
-   if(isset($_POST['profil_twitch']) AND !empty($_POST['profil_twitch']) AND $_POST['profil_twitch'] != $user['pseudo']) {
+   if(isset($_POST['profil_twitch']) AND !empty($_POST['profil_twitch']) AND $_POST['profil_twitch'] != $u['pseudo']) {
       $profil_twitch = htmlspecialchars($_POST['profil_twitch']);
       $insertprofils_twitch = $bdd->prepare("UPDATE users SET profil_twitch = ? WHERE id = ?");
       $insertprofils_twitch->execute(array($profil_twitch, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }  
    
-   if(isset($_POST['profil_instagram']) AND !empty($_POST['profil_instagram']) AND $_POST['profil_instagram'] != $user['pseudo']) {
+   if(isset($_POST['profil_instagram']) AND !empty($_POST['profil_instagram']) AND $_POST['profil_instagram'] != $u['pseudo']) {
       $profil_instagram = htmlspecialchars($_POST['profil_instagram']);
       $insertprofils_instagram = $bdd->prepare("UPDATE users SET profil_instagram = ? WHERE id = ?");
       $insertprofils_instagram->execute(array($profil_instagram, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    } 
  
-   if(isset($_POST['profil_twitter']) AND !empty($_POST['profil_twitter']) AND $_POST['profil_twitter'] != $user['pseudo']) {
+   if(isset($_POST['profil_twitter']) AND !empty($_POST['profil_twitter']) AND $_POST['profil_twitter'] != $u['pseudo']) {
       $profil_twitter = htmlspecialchars($_POST['profil_twitter']);
       $insertprofils_twitter = $bdd->prepare("UPDATE users SET profil_twitter = ? WHERE id = ?");
       $insertprofils_twitter->execute(array($profil_twitter, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
  
-   if(isset($_POST['profil_facebook']) AND !empty($_POST['profil_facebook']) AND $_POST['profil_facebook'] != $user['pseudo']) {
+   if(isset($_POST['profil_facebook']) AND !empty($_POST['profil_facebook']) AND $_POST['profil_facebook'] != $u['pseudo']) {
       $profil_facebook = htmlspecialchars($_POST['profil_facebook']);
       $insertprofils_facebook = $bdd->prepare("UPDATE users SET profil_facebook = ? WHERE id = ?");
       $insertprofils_facebook->execute(array($profil_facebook, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    } 
  
-   if(isset($_POST['sex']) AND !empty($_POST['sex']) AND $_POST['sex'] != $user['pseudo']) {
+   if(isset($_POST['sex']) AND !empty($_POST['sex']) AND $_POST['sex'] != $u['pseudo']) {
       $sex = htmlspecialchars($_POST['sex']);
       $insertsex = $bdd->prepare("UPDATE users SET sex = ? WHERE id = ?");
       $insertsex->execute(array($sex, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
    
-   if(isset($_POST['avatar']) AND !empty($_POST['avatar']) AND $_POST['avatar'] != $user['pseudo']) {
+   if(isset($_POST['avatar']) AND !empty($_POST['avatar']) AND $_POST['avatar'] != $u['pseudo']) {
       $avatar = htmlspecialchars($_POST['avatar']);
       $insertavatar = $bdd->prepare("UPDATE users SET avatar = ? WHERE id = ?");
       $insertavatar->execute(array($avatar, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
    
-   if(isset($_POST['anniversaire']) AND !empty($_POST['anniversaire']) AND $_POST['anniversaire'] != $user['pseudo']) {
+   if(isset($_POST['anniversaire']) AND !empty($_POST['anniversaire']) AND $_POST['anniversaire'] != $u['pseudo']) {
       $anniversaire = htmlspecialchars($_POST['anniversaire']);
       $insertanniversaire = $bdd->prepare("UPDATE users SET anniversaire = ? WHERE id = ?");
       $insertanniversaire->execute(array($anniversaire, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
    
-   if(isset($_POST['prenom']) AND !empty($_POST['prenom']) AND $_POST['prenom'] != $user['pseudo']) {
+   if(isset($_POST['prenom']) AND !empty($_POST['prenom']) AND $_POST['prenom'] != $u['pseudo']) {
       $prenom = htmlspecialchars($_POST['prenom']);
       $insertprenom = $bdd->prepare("UPDATE users SET prenom = ? WHERE id = ?");
       $insertprenom->execute(array($prenom, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
      
-   if(isset($_POST['newpseudo']) AND !empty($_POST['newpseudo']) AND $_POST['newpseudo'] != $user['pseudo']) {
+   if(isset($_POST['newpseudo']) AND !empty($_POST['newpseudo']) AND $_POST['newpseudo'] != $u['pseudo']) {
       $newpseudo = htmlspecialchars($_POST['newpseudo']);
       $insertpseudo = $bdd->prepare("UPDATE users SET username = ? WHERE id = ?");
       $insertpseudo->execute(array($newpseudo, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
    
-   if(isset($_POST['newmail']) AND !empty($_POST['newmail']) AND $_POST['newmail'] != $user['mail']) {
+   if(isset($_POST['newmail']) AND !empty($_POST['newmail']) AND $_POST['newmail'] != $u['mail']) {
       $newmail = htmlspecialchars($_POST['newmail']);
       $insertmail = $bdd->prepare("UPDATE users SET email = ? WHERE id = ?");
       $insertmail->execute(array($newmail, $_SESSION['id']));
@@ -160,7 +210,8 @@ if(isset($_SESSION['id'])) {
          $msg = "Vos deux mdp ne correspondent pas !";
       }
    }
-  
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -172,6 +223,7 @@ if(isset($_SESSION['id'])) {
 
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
+	
 	<script>
 		WebFont.load({
 			google: {"families":["Lato:300,400,700,900"]},
@@ -218,17 +270,17 @@ if(isset($_SESSION['id'])) {
 							
 			<div class="row">
 					<div class="col-md-12">
-						<div class="card">
+						<div class="card" style="background-color: #0f1117;">
 								
 							<div class="card-header">
 								<h4 class="card-title"><center>Modifier les informations du profil</center></h4>
 							</div>
 							<center><?php if(isset($msg)) { echo $msg; } ?></center>
-						<div class="card-body" style="background-position: center; background-repeat: no-repeat; background-image: url('../assets/img/background/<?php echo $user['background']; ?>')">
+						<div class="card-body" style="background-position: center; background-repeat: no-repeat; background-size: 100% auto; height: 100%; width: auto; background-image: url('../uploads/background/<?php echo $u['background']; ?>')">
 						
 						<div class="col-md-12">
 							<center><div class="avatar1">
-							 <img src="../uploads/avatar/<?php echo $user['avatar']; ?>" id="preview" width="142px" height="142px" class="rounded-circle">
+							 <img src="../uploads/avatar/<?php echo $u['avatar']; ?>" id="preview" width="142px" height="142px" class="rounded-circle">
 							</div></center>
 							
 							<form method="POST" action="" enctype="multipart/form-data">
@@ -236,22 +288,35 @@ if(isset($_SESSION['id'])) {
 								<div class="input-group mb-13">
 									<div class="col-md-4 mx-auto input-group-prepend">
 										<input type="file" class="form-control" name="avatar" id="avatar" aria-label="avatar" aria-describedby="basic-addon1">
-										<input type="submit" value="Upload" name="submit">
+										<input type="submit" class="btn btn-primary" value="Avatar" name="submit">
 									</div>
 								</div>
 							</div>	
 							</form>
 							
+							<form method="POST" id="upload_form" action="" enctype="multipart/form-data">
+							<div class="form-group">
+								<div class="input-group mb-13">
+									<div class="col-md-4 mx-auto input-group-prepend">
+										<input type="file" class="form-control" name="background" id="background" aria-label="avatar" aria-describedby="basic-addon1">
+										<input type="submit" class="btn btn-secondary" value="background" name="submit">
+									</div>
+								</div>
+							</div>	
+							
+							</form>
+							
+	
 								<div class="mx-auto">
 									<p></p>
-										<center><div class="name"><font color="#FFF"><i class="<?php echo $user['icon']; ?>"></i> <?php echo $user['username']; ?></font> <?php echo $user['groupe']; ?></font></div>
-										<div class="job"><b><font color="#FFFFFF">Enregistré depuis le :</font></b></div>
-										<div class="desc"><b><font color="#FFFFFF">(<?php echo $user['date']; ?>)</font></b></div>
+										<center><div class="name col-md-2" style="background-color: #000c;"><font color="#FFF"><i class="<?php echo $u['icon']; ?>"></i> <?php echo $u['username']; ?></font><font size="1px" color="<?php echo $user['groupe_color']; ?>"> (<?php echo $user['groupe']; ?>)</font></div>
+										<div class="job col-md-2" style="background-color: #000c;"><b><font color="#FFFFFF">Enregistré depuis le :</font></b></div>
+										<div class="desc col-md-2" style="background-color: #000c;"><b><font color="#FFFFFF"><?php echo (strftime("%d %B %Y")) ; ?></font></b></div>
 									<p></p>
-										<div class="name3"><b><font color="RED">DEBUG ON</font></b></div>
-										<div class="id"><b><font color="#fff">ID dans la BDD:</font> <font color="RED"><?php echo $_SESSION["id"]; ?></font></b></div>
-										<div class='pseudo-id'><font color="#fff"> Pseudo dans la BDD:</font> <font color="RED"><?php echo $_SESSION['username']; ?></font></b></div>
-										<div class='pseudo-id'><font color="#fff"> Votre ip:</font> <font color="RED"><?php echo $_SERVER['REMOTE_ADDR']; ?></font></b></div></center>
+										<div class="name col-md-2" style="background-color: #000c;"><b><font color="RED">DEBUG ON</font></b></div>
+										<div class="id  col-md-2" style="background-color: #000c;"><b><font color="#fff">ID dans la BDD:</font> <font color="RED"><?php echo $_SESSION["id"]; ?></font></b></div>
+										<div class='pseudo-id col-md-2' style="background-color: #000c;"><font color="#fff"> Pseudo dans la BDD:</font> <font color="RED"><?php echo $_SESSION['username']; ?></font></b></div>
+										<div class='pseudo-id col-md-2' style="background-color: #000c;"><font color="#fff"> Votre ip:</font> <font color="RED"><?php echo $_SERVER['REMOTE_ADDR']; ?></font></b></div></center>
 									<p></p>
 								</div>
 						
@@ -271,7 +336,7 @@ if(isset($_SESSION['id'])) {
 										
 										<div class="input-group col-md-4 mx-auto mb-13">
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1"><?php echo $user['prenom']; ?></span>
+												<span class="input-group-text" id="basic-addon1"><?php echo $u['prenom']; ?></span>
 											</div>
 												<input type="text" required minlength="4" maxlength="14" size="14" class="form-control"  name="prenom" placeholder="Prenom" aria-label="Prenom" aria-describedby="basic-addon1">
 										</div>
@@ -279,21 +344,21 @@ if(isset($_SESSION['id'])) {
 			
 										<div class="input-group col-md-4 mx-auto mb-13">
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1"><?php echo $user['username']; ?></span>
+												<span class="input-group-text" id="basic-addon1"><?php echo $u['username']; ?></span>
 											</div>
 												<input type="text" required minlength="4" maxlength="16" size="16" class="form-control"  name="newpseudo" placeholder="Pseudo" aria-label="Pseudo" aria-describedby="basic-addon1">
 										</div>
 										
 										<div class="input-group col-md-4 mx-auto mb-13">
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="basic-addon1"><?php echo $user['anniversaire']; ?></span>
+												<span class="input-group-text" id="basic-addon1"><?php echo $u['anniversaire']; ?></span>
 											</div>
 												<input type="date" class="form-control"  name="anniversaire" placeholder="anniversaire" aria-label="anniversaire" aria-describedby="basic-addon1">
 										</div>
 										
 										<div class="input-group col-md-4 mx-auto mb-13">
 											<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><?php echo $user['email']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><?php echo $u['email']; ?></span>
 											</div>
 												<input type="text" size="64" maxLength="64" required placeholder="@gmail.com uniquement" pattern="^[a-zA-Z][-_.a-zA-Z0-9]{5,29}@g(oogle)?mail.com" class="form-control" name="newmail" aria-label="newmail" aria-describedby="basic-addon1">
 										</div>
@@ -313,7 +378,7 @@ if(isset($_SESSION['id'])) {
 		
 				<div class="row">
 					<div class="col-md-4">
-						<div class="card">
+						<div class="card" style="background-color: #0f1117;">
 							<div class="card-header">
 								<h4 class="card-title"><center>Paramètretre de votre widget Discord</center></h4>
 							</div>
@@ -321,12 +386,11 @@ if(isset($_SESSION['id'])) {
 							<div class="card-body">
 								<div class="col-md-12 mx-auto">
 									<div class='discord'>
-									<iframe src="https://discordapp.com/widget?id=<?php echo $user['discord_profil']; ?>&theme=dark" width="100%" height="482" allowtransparency="true" frameborder="0"></iframe>
+									<iframe src='https://discordapp.com/widget?id=<?php echo $u['discord_profil']?>&theme=dark' width='100%' height='487' allowtransparency='true' frameborder='0'></iframe>
 									</div>
 								</div>
-								
-							<form method="POST" action="" enctype="multipart/form-data">
-									<input type="text" class="form-control"  name="discord_profil" placeholder="WIDGET ID" aria-label="discord_profil" aria-describedby="basic-addon1">
+								<form method="POST" action="" enctype="multipart/form-data">
+									<input type="text" class="form-control col-md-11 mx-auto"  name="discord_profil" placeholder="WIDGET ID" aria-label="discord_profil" aria-describedby="basic-addon1">
 						
 								<div class="card-footer col-md-12 mx-auto">
 									<center><input type="submit" class="btn btn-primary" value="Valider"></center>
@@ -337,7 +401,7 @@ if(isset($_SESSION['id'])) {
 					</div>
 				
 					<div class="col-md-8">
-						<div class="card">
+						<div class="card" style="background-color: #0f1117;">
 							<div class="card-header">
 								<h4 class="card-title"><center>Autres informations</center></h4>
 							</div>
@@ -351,21 +415,21 @@ if(isset($_SESSION['id'])) {
 								<form method="POST" action="" enctype="multipart/form-data">
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/steam.png"> | <?php echo $user['profil_steam']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/steam.png"> | <?php echo $u['profil_steam']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_steam" placeholder="" aria-label="profil_steam" aria-describedby="basic-addon1">
 									</div>
 									
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/bnet.png"> | <?php echo $user['profil_bnet']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/bnet.png"> | <?php echo $u['profil_bnet']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_bnet" placeholder="" aria-label="profil_bnet" aria-describedby="basic-addon1">
 									</div>
 									
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/discord.png"> | <?php echo $user['profil_discord']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/discord.png"> | <?php echo $u['profil_discord']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_discord" placeholder="" aria-label="profil_discord" aria-describedby="basic-addon1">
 									</div>
@@ -375,14 +439,14 @@ if(isset($_SESSION['id'])) {
 									
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/youtube.png"> | <?php echo $user['profil_youtube']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/youtube.png"> | <?php echo $u['profil_youtube']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_youtube" placeholder="" aria-label="profil_youtube" aria-describedby="basic-addon1">
 									</div>
 									
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="20" width="24" src="../assets/img/twitch.png"> | <?php echo $user['profil_twitch']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="20" width="24" src="../assets/img/twitch.png"> | <?php echo $u['profil_twitch']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_twitch" placeholder="" aria-label="profil_twitch" aria-describedby="basic-addon1">
 									</div>
@@ -392,21 +456,21 @@ if(isset($_SESSION['id'])) {
 									
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/instagram.png"> | <?php echo $user['profil_instagram']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/instagram.png"> | <?php echo $u['profil_instagram']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_instagram" placeholder="" aria-label="profil_instagram" aria-describedby="basic-addon1">
 									</div>
 									
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/twitter.png"> | <?php echo $user['profil_twitter']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/twitter.png"> | <?php echo $u['profil_twitter']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_twitter" placeholder="" aria-label="profil_twitter" aria-describedby="basic-addon1">
 									</div>
 									
 									<div class="input-group col-md-5 mx-auto">
 										<div class="input-group-prepend">
-											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/facebook.png"> | <?php echo $user['profil_facebook']; ?></span>
+											<span class="input-group-text" id="basic-addon1"><img height="24" width="24" src="../assets/img/facebook.png"> | <?php echo $u['profil_facebook']; ?></span>
 										</div>
 											<input type="text" class="form-control" name="profil_facebook" placeholder="" aria-label="profil_facebook" aria-describedby="basic-addon1">
 									</div>
@@ -425,7 +489,6 @@ if(isset($_SESSION['id'])) {
 			</div>
 		</div><!--CONTENT-->
 		
-	<?php include('../include/theme.php');?>
 	<?php include('../include/footer.php');?>
 		</div><!--MAIN PANEL-->
 
@@ -520,6 +583,7 @@ $('input[type="file"]').change(function(e) {
   reader.readAsDataURL(this.files[0]);
 });
 </script>
+
 </div>
 </body>
 </html>
@@ -528,5 +592,6 @@ $('input[type="file"]').change(function(e) {
 }
 else {
    header("Location: login.php");
+}
 }
 ?>

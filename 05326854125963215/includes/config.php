@@ -1,7 +1,6 @@
 <?php
 ///////////////////////////////////[CONFIGURATION NAVBAR]///////////////////////////////////////**
-$repertoire ='/var/www/html/'; //NOM DU DOMAINE IP/DOMAINE/LOCALHOST POUR LES DEV
-$url ='https://tronpa.fr'; //NOM DU DOMAINE IP/DOMAINE/LOCALHOST POUR LES DEV
+$url ='https://tronpa.fr/'; //NOM DU DOMAINE IP/DOMAINE/LOCALHOST POUR LES DEV
 $sitename = 'Dragonia |'; // NOM DU SITE
 $iconsite ='../assets/img/favicon.ico'; // ICONE DU SITEWEB
 $logosite ='../assets/img/dragon.png'; // LOGO DU MENU DE NAVIGATION
@@ -56,4 +55,5 @@ $connexionhref = 'http://149.202.251.64/module/users/connexion.php';
 $nomnavigation1 = 'Inscription/Connexion';// MENU DE NAVIGATION
 
 ///////////////////////////////////[CONFIGURATION NAVBAR END]///////////////////////////////////
+$succesdelet = 'supprimer avec suces';// MENU DE NAVIGATION
 ?>
